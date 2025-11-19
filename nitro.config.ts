@@ -8,6 +8,9 @@ const nitroOption: Parameters<typeof viteNitro>[0] = {
   experimental: {
     database: true,
   },
+  // CORS配置已在middleware/cors.ts中实现，使用环境变量配置更灵活
+  routeRules: {
+  },
   rollupConfig: {
     plugins: [RollopGlob()],
   },
@@ -66,5 +69,10 @@ if (process.env.VERCEL) {
 }
 
 export default function () {
+  // 添加中间件到nitro配置
+  nitroOption.middleware = [
+    "~/server/middleware/cors.ts",
+    "~/server/middleware/auth.ts"
+  ]
   return viteNitro(nitroOption)
 }
